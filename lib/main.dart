@@ -87,8 +87,8 @@ class _MyAppState extends State<MyApp> {
                       BottomNavigationBarItem(
                           icon: Icon(Icons.home), label: 'Pagina Principal'),
                       BottomNavigationBarItem(
-                          icon: Icon(Icons.favorite),
-                          label: 'Restaurantes Favoritos')
+                          icon: Icon(Icons.app_registration),
+                          label: 'Consulta Medica')
                     ],
                   ),
                 )
