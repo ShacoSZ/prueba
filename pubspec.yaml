@@ -69,6 +69,8 @@ flutter:
   - assets/raccoon_waifu_doctor_1.jpg
   - assets/raccoon_waifu_doctor_2.jpg
   - assets/raccoon_waifu_doctor.jpg  
+  - assets/raccoon_test_anime.jpg
+  - assets/raccoon_anime_doctor_square.jpg  
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

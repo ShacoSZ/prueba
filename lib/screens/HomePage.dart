@@ -53,7 +53,7 @@ class _homepageState extends State<HomePage> {
               height: 250,
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(10),
-                child: Image.asset('assets/raccoon_anime_doctor_cropped.jpg',
+                child: Image.asset('assets/raccoon_test_anime.jpg',
                     fit: BoxFit.cover),
               ),
             )),
