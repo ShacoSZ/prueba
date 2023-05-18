@@ -21,7 +21,7 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        color: const Color(0xFFA9A9FF),
+        color: const Color(0xFFEDF2F5),
         child: ListView(children: [
           Form(
             key: _formKey,
@@ -139,12 +139,16 @@ class _LoginFormState extends State<LoginForm> {
                       ElevatedButton(
                         onPressed: () => navigateToSignUpScreen(context),
                         style: ElevatedButton.styleFrom(
+                          textStyle: TextStyle(color: Colors.black),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10.0),
                           ),
                           backgroundColor: Colors.white,
                         ),
-                        child: Text('Registrate Aquí'),
+                        child: Text(
+                          'Registrate Aquí',
+                          style: TextStyle(color: Colors.black),
+                        ),
                       )
                     ],
                   ),

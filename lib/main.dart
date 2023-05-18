@@ -71,7 +71,7 @@ class _MyAppState extends State<MyApp> {
           debugShowCheckedModeBanner: true,
           scrollBehavior: MyCustomScrollBehavior(),
           theme: ThemeData(
-            primarySwatch: Colors.lightBlue,
+            primaryColor: const Color(0xFF04557D),
           ),
           home: isAuth
               ? Scaffold(

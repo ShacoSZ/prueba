@@ -31,7 +31,7 @@ class _SignupPageState extends State<SignUpPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Container(
-            color: const Color(0xFFA9A9FF),
+            color: const Color(0xFFEDF2F5),
             child: Form(
                 key: _SignUpKey,
                 child: Padding(
@@ -219,8 +219,14 @@ class _SignupPageState extends State<SignUpPage> {
                                 ),
                                 backgroundColor: Colors.white,
                               ),
-                              icon: Icon(Icons.keyboard_return_sharp),
-                              label: Text('Regresar al menu')),
+                              icon: Icon(
+                                Icons.keyboard_return_sharp,
+                                color: Colors.black,
+                              ),
+                              label: Text(
+                                'Regresar al menu',
+                                style: TextStyle(color: Colors.black),
+                              )),
                         ])))));
   }
 }
