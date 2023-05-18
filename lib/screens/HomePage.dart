@@ -36,55 +36,34 @@ class _homepageState extends State<HomePage> {
             ),
           ],
         ),
-        body: ListView(
-          children: [
-            Center(
-              child: Text(
-                'Bienvenido a Raccoon Doctor',
-                style: TextStyle(fontSize: 20),
+        body: Container(
+          color: const Color(0xFFEDF2F5),
+          alignment: Alignment.center,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Center(
+                child: Text(
+                  'Bienvenido a Raccoon Doctor',
+                  style: TextStyle(fontSize: 20),
+                  textAlign: TextAlign.center,
+                ),
               ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Center(
-                child: Container(
-              width: 250,
-              height: 250,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Image.asset('assets/raccoon_test_anime.jpg',
-                    fit: BoxFit.cover),
+              SizedBox(
+                height: 20,
               ),
-            )),
-            SizedBox(
-              height: 20,
-            ),
-            Center(
-              child: Text(
-                '${user?.email}',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Center(
-              child: Text(
-                '${user?.getIdToken()}',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-            SizedBox(
-              height: 20,
-            ),
-            Center(
-              child: Text(
-                '${user?.providerData}',
-                style: TextStyle(fontSize: 20),
-              ),
-            ),
-          ],
+              Center(
+                  child: Container(
+                width: 250,
+                height: 250,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image.asset('assets/raccoon_test_anime.jpg',
+                      fit: BoxFit.cover),
+                ),
+              )),
+            ],
+          ),
         ));
   }
 }

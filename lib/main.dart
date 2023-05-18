@@ -77,6 +77,7 @@ class _MyAppState extends State<MyApp> {
               ? Scaffold(
                   body: pages[actualPage],
                   bottomNavigationBar: BottomNavigationBar(
+                    backgroundColor: const Color(0xFFEDF2F5),
                     onTap: (index) {
                       setState(() {
                         actualPage = index;
