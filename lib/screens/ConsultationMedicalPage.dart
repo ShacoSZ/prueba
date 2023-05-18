@@ -31,7 +31,7 @@ class _favoritepageState extends State<FavoritePage> {
   @override
   void initState() {
     super.initState();
-    _dateController.text = DateTime.now().toString();
+    _dateController.text = '';
   }
 
   @override
