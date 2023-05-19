@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:raccoon_doctor/screens/SignUpPage.dart';
 import 'package:raccoon_doctor/screens/HomePage.dart';
 import 'package:raccoon_doctor/main.dart';
+import 'package:raccoon_doctor/screens/RecoveryPasswordPage.dart';
 
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -16,6 +17,7 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final _formKey = GlobalKey<FormState>();
   late String _email, _password;
+
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   @override
@@ -23,35 +25,33 @@ class _LoginFormState extends State<LoginForm> {
     return Container(
         color: const Color(0xFFEDF2F5),
         child: ListView(children: [
+          const Text('Iniciar Sesión',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 25,
+                fontWeight: FontWeight.bold,
+              )),
           Form(
             key: _formKey,
             child: Padding(
-              padding: const EdgeInsets.all(16.0),
+              padding: const EdgeInsets.all(22.0),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  Container(
-                    width: 250,
-                    height: 250,
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.asset('assets/raccoon_chibi_doctor.jpg',
-                          fit: BoxFit.cover),
-                    ),
+                  const SizedBox(height: 155),
+                  const Text(
+                    'Ingresa tu Correo Electronico',
+                    style: TextStyle(fontSize: 15),
                   ),
-                  SizedBox(height: 15),
-                  Text(
-                    'Ingresa tus datos de inicio de sesión',
-                    style: TextStyle(fontSize: 16),
-                  ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 9),
                   TextFormField(
                     textInputAction: TextInputAction.next,
                     decoration: InputDecoration(
                       labelText: 'Email',
-                      labelStyle: TextStyle(color: const Color(0xFF19969E)),
+                      labelStyle: const TextStyle(color: Color(0xFF19969E)),
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15.0)),
+                          borderRadius: BorderRadius.circular(10.0)),
                       filled: true,
                       fillColor: Colors.white,
                     ),
@@ -65,15 +65,20 @@ class _LoginFormState extends State<LoginForm> {
                       _email = value.trim();
                     },
                   ),
-                  SizedBox(height: 16),
+                  const SizedBox(height: 16),
+                  const Text(
+                    'Ingresa tu Contraseña',
+                    style: TextStyle(fontSize: 15),
+                  ),
+                  const SizedBox(height: 9),
                   TextFormField(
                     textInputAction: TextInputAction.next,
                     obscureText: true,
                     decoration: InputDecoration(
                       labelText: 'Contraseña',
-                      labelStyle: TextStyle(color: const Color(0xFF19969E)),
+                      labelStyle: const TextStyle(color: Color(0xFF19969E)),
                       border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15.0)),
+                          borderRadius: BorderRadius.circular(10.0)),
                       filled: true,
                       fillColor: Colors.white,
                     ),
@@ -87,71 +92,78 @@ class _LoginFormState extends State<LoginForm> {
                       _password = value.trim();
                     },
                   ),
-                  SizedBox(height: 16),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(width: 20),
-                      ElevatedButton(
-                        onPressed: () async {
-                          if (_formKey.currentState!.validate()) {
-                            try {
-                              final UserCredential userCredential =
-                                  await FirebaseAuth.instance
-                                      .signInWithEmailAndPassword(
-                                email: _email,
-                                password: _password,
-                              );
-                              final userState = context.read<UserState>();
-                              userState.setUser(userCredential.user);
-                              Navigator.of(context).pushReplacement(
-                                MaterialPageRoute(
-                                    builder: (context) => MyApp()),
-                              );
-                            } on FirebaseAuthException catch (e) {
-                              if (e.code == 'user-not-found') {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content:
-                                        Text('No user found for that email.'),
-                                  ),
-                                );
-                              } else if (e.code == 'wrong-password') {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                        'Wrong password provided for that user.'),
-                                  ),
-                                );
-                              }
-                            }
-                          }
-                        },
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(
-                                10.0), // Radio de la esquina redondeada
-                          ),
-                        ),
-                        child: Text('Iniciar sesión'),
-                      ),
-                      SizedBox(width: 50),
-                      ElevatedButton(
-                        onPressed: () => navigateToSignUpScreen(context),
-                        style: ElevatedButton.styleFrom(
-                          textStyle: TextStyle(color: Colors.black),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10.0),
-                          ),
-                          backgroundColor: Colors.white,
-                        ),
-                        child: Text(
-                          'Registrate Aquí',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                      )
-                    ],
+                  TextButton(
+                    onPressed: () => navigateToRecoveryPasswordScreen(context),
+                    child: const Text('Olvide mi Contraseña'),
                   ),
+                  const SizedBox(height: 16),
+                  Container(
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          const SizedBox(width: 25),
+                          ElevatedButton(
+                            onPressed: () async {
+                              if (_formKey.currentState!.validate()) {
+                                try {
+                                  final UserCredential userCredential =
+                                      await FirebaseAuth.instance
+                                          .signInWithEmailAndPassword(
+                                    email: _email,
+                                    password: _password,
+                                  );
+                                  final userState = context.read<UserState>();
+                                  userState.setUser(userCredential.user);
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                        builder: (context) => MyApp()),
+                                  );
+                                } on FirebaseAuthException catch (e) {
+                                  if (e.code == 'user-not-found') {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                            'No user found for that email.'),
+                                      ),
+                                    );
+                                  } else if (e.code == 'wrong-password') {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                        content: Text(
+                                            'Wrong password provided for that user.'),
+                                      ),
+                                    );
+                                  }
+                                }
+                              }
+                            },
+                            style: ElevatedButton.styleFrom(
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(
+                                    10.0), // Radio de la esquina redondeada
+                              ),
+                            ),
+                            child: const Text('Iniciar sesión'),
+                          ),
+                          const SizedBox(width: 50),
+                          ElevatedButton(
+                            onPressed: () => navigateToSignUpScreen(context),
+                            style: ElevatedButton.styleFrom(
+                              textStyle: const TextStyle(color: Colors.black),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                              backgroundColor: Colors.white,
+                            ),
+                            child: const Text(
+                              'Registrate Aquí',
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          ),
+                          const SizedBox(width: 25)
+                        ],
+                      )),
                 ],
               ),
             ),
@@ -164,6 +176,14 @@ void navigateToSignUpScreen(BuildContext context) {
   Navigator.of(context).push(
     MaterialPageRoute(
       builder: (_) => SignUpPage(),
+    ),
+  );
+}
+
+void navigateToRecoveryPasswordScreen(BuildContext context) {
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (_) => RecoveryPasswordPage(),
     ),
   );
 }

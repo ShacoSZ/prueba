@@ -39,11 +39,21 @@ class _SignupPageState extends State<SignUpPage> {
                     child: ListView(
                         //crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(
-                            'Ingresa tus datos para crear una cuenta',
-                            style: TextStyle(fontSize: 16),
+                          const Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              'Crear usuario',
+                              style: TextStyle(
+                                  fontSize: 25, fontWeight: FontWeight.bold),
+                            ),
                           ),
-                          SizedBox(height: 16),
+                          SizedBox(height: 55),
+                          const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Inserte su Nombre',
+                            ),
+                          ),
                           TextFormField(
                             textInputAction: TextInputAction.next,
                             decoration: InputDecoration(
@@ -54,6 +64,7 @@ class _SignupPageState extends State<SignUpPage> {
                                   borderRadius: BorderRadius.circular(15.0)),
                               filled: true,
                               fillColor: Colors.white,
+                              contentPadding: const EdgeInsets.all(10.0),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -66,6 +77,12 @@ class _SignupPageState extends State<SignUpPage> {
                             },
                           ),
                           SizedBox(height: 16),
+                          const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Inserte su Apellido',
+                            ),
+                          ),
                           TextFormField(
                             textInputAction: TextInputAction.next,
                             decoration: InputDecoration(
@@ -76,6 +93,7 @@ class _SignupPageState extends State<SignUpPage> {
                                   borderRadius: BorderRadius.circular(15.0)),
                               filled: true,
                               fillColor: Colors.white,
+                              contentPadding: const EdgeInsets.all(10.0),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -88,6 +106,12 @@ class _SignupPageState extends State<SignUpPage> {
                             },
                           ),
                           SizedBox(height: 16),
+                          const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Inserte su Correo Electronico',
+                            ),
+                          ),
                           TextFormField(
                             textInputAction: TextInputAction.next,
                             decoration: InputDecoration(
@@ -98,6 +122,7 @@ class _SignupPageState extends State<SignUpPage> {
                                   borderRadius: BorderRadius.circular(15.0)),
                               filled: true,
                               fillColor: Colors.white,
+                              contentPadding: const EdgeInsets.all(10.0),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -110,6 +135,12 @@ class _SignupPageState extends State<SignUpPage> {
                             },
                           ),
                           SizedBox(height: 16),
+                          const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Inserte su Telefono',
+                            ),
+                          ),
                           TextFormField(
                             keyboardType: TextInputType.phone,
                             textInputAction: TextInputAction.next,
@@ -121,6 +152,7 @@ class _SignupPageState extends State<SignUpPage> {
                                   borderRadius: BorderRadius.circular(15.0)),
                               filled: true,
                               fillColor: Colors.white,
+                              contentPadding: const EdgeInsets.all(10.0),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
@@ -133,6 +165,12 @@ class _SignupPageState extends State<SignUpPage> {
                             },
                           ),
                           SizedBox(height: 16),
+                          const Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              'Inserte una Contraseña',
+                            ),
+                          ),
                           TextFormField(
                             obscureText: true,
                             textInputAction: TextInputAction.next,
@@ -144,6 +182,7 @@ class _SignupPageState extends State<SignUpPage> {
                                   borderRadius: BorderRadius.circular(15.0)),
                               filled: true,
                               fillColor: Colors.white,
+                              contentPadding: const EdgeInsets.all(10.0),
                             ),
                             validator: (value) {
                               if (value == null || value.isEmpty) {
