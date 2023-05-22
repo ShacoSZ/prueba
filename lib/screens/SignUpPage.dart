@@ -25,8 +25,13 @@ class SignUpPage extends StatefulWidget {
   _SignupPageState createState() => _SignupPageState();
 }
 
+String verificationID = "";
+bool otpVisibility = false;
+TextEditingController _codeController = TextEditingController();
+
 class _SignupPageState extends State<SignUpPage> {
   final _SignUpKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -223,16 +228,11 @@ class _SignupPageState extends State<SignUpPage> {
                                   // Envía un correo electrónico de verificación al usuario
                                   await userCredential.user!
                                       .sendEmailVerification();
-
-                                  final PhoneAuthCredential phoneCredential =
-                                      PhoneAuthProvider.credential(verificationId: , smsCode: smsCode);
-
-                                  await userCredential.user!
-                                      .linkWithPhoneNumber(
-                                          "+52${usuario.phone!}");
+                                  dialogVerifyPhoneNumber(
+                                      context, usuario.phone!);
 
                                   // Navega a la página de inicio
-                                  navigateToHomePage(context);
+                                  //navigateToHomePage(context);
                                 } on FirebaseAuthException catch (e) {
                                   if (e.code == 'email-already-in-use') {
                                     ScaffoldMessenger.of(context).showSnackBar(
@@ -251,7 +251,7 @@ class _SignupPageState extends State<SignUpPage> {
                                   }
                                 }
                               }
-                              navigateToHomePage(context);
+                              //navigateToHomePage(context);
                             },
                             child: Text('Crear Cuenta'),
                           ),
@@ -286,61 +286,86 @@ void navigateToHomePage1(BuildContext context) {
   );
 }
 
-void dialogVerifyPhoneNumber(BuildContext context,String PhoneNumber) {
-  String smsCode = '';
+void dialogVerifyPhoneNumber(BuildContext context, String phoneNumber) {
   final userCredential = FirebaseAuth.instance.currentUser;
+
   showDialog(
     context: context,
     builder: (BuildContext context) {
+      final TextEditingController _codeController = TextEditingController();
+      String verificationId = '';
+
+      void verifyPhoneNumber() async {
+        String code = _codeController.text.trim();
+        PhoneAuthCredential credential = PhoneAuthProvider.credential(
+          verificationId: verificationId,
+          smsCode: code,
+        );
+
+        try {
+          await userCredential!.linkWithCredential(credential);
+          print('Usuario vinculado con éxito');
+          navigateToHomePage(context);
+        } catch (e) {
+          print('Error al vincular el número de teléfono: $e');
+          // Maneja el error de vinculación aquí
+        }
+      }
+
       return AlertDialog(
         title: Text('Verificar número de teléfono'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            Text('Por favor, ingresa el código de verificación enviado a $PhoneNumber'),
+            Text(
+                'Por favor, ingresa el código de verificación enviado a $phoneNumber'),
             TextField(
               keyboardType: TextInputType.number,
+              controller: _codeController,
               inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly
+                FilteringTextInputFormatter.digitsOnly,
               ],
-              onChanged: (value) {
-                smsCode = value;
-              },
             ),
           ],
         ),
         actions: <Widget>[
           ElevatedButton(
-            child: Text('Verificar'),
-            onPressed: () async {
-              try {
-                final PhoneAuthCredential phoneCredential =
-                    PhoneAuthProvider.credential(verificationId: , smsCode: smsCode);
-
-                await userCredential.user!
-                    .linkWithPhoneNumber(
-                        "+52${usuario.phone!}");
-              } on FirebaseAuthException catch (e) {
-                if (e.code == 'invalid-verification-code') {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('El código de verificación es incorrecto.'),
-                    ),
-                  );
-                }
-              }
+            child: Text('Cerrar'),
+            onPressed: () {
               Navigator.of(context).pop();
             },
+          ),
+          ElevatedButton(
+            child: Text('Verificar'),
+            onPressed: verifyPhoneNumber,
           ),
         ],
       );
     },
   );
-}
-{
 
+  FirebaseAuth.instance.verifyPhoneNumber(
+    phoneNumber: "+52$phoneNumber",
+    verificationCompleted: (PhoneAuthCredential credential) async {
+      try {
+        await userCredential!.linkWithCredential(credential);
+        print('Usuario vinculado automáticamente');
+        navigateToHomePage(context);
+      } catch (e) {
+        print('Error al vincular el número de teléfono: $e');
+        // Maneja el error de vinculación aquí
+      }
+    },
+    verificationFailed: (FirebaseAuthException e) {
+      print('Error de verificación: ${e.message}');
+      // Maneja el error de verificación aquí
+    },
+    codeSent: (String verificationId, int? resendToken) {
+      verificationId = verificationId;
+    },
+    codeAutoRetrievalTimeout: (String verificationId) {},
+  );
 }
-
 
 void navigateToHomePage(BuildContext context) {
   Route route = PageRouteBuilder(
