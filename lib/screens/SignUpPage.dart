@@ -9,6 +9,8 @@ import 'package:raccoon_doctor/screens/LoginPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'LogInwithPhoneNumber.dart';
+
 class UserON {
   String? name;
   String? lastname;
@@ -143,36 +145,6 @@ class _SignupPageState extends State<SignUpPage> {
                           const Align(
                             alignment: Alignment.centerLeft,
                             child: Text(
-                              'Inserte su Telefono',
-                            ),
-                          ),
-                          TextFormField(
-                            keyboardType: TextInputType.phone,
-                            textInputAction: TextInputAction.next,
-                            decoration: InputDecoration(
-                              labelText: 'Telefono',
-                              labelStyle:
-                                  TextStyle(color: const Color(0xFF19969E)),
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(15.0)),
-                              filled: true,
-                              fillColor: Colors.white,
-                              contentPadding: const EdgeInsets.all(10.0),
-                            ),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Por favor, ingresa tu telefono';
-                              }
-                              return null;
-                            },
-                            onChanged: (value) {
-                              usuario.phone = value;
-                            },
-                          ),
-                          SizedBox(height: 16),
-                          const Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
                               'Inserte una Contraseña',
                             ),
                           ),
@@ -228,8 +200,8 @@ class _SignupPageState extends State<SignUpPage> {
                                   // Envía un correo electrónico de verificación al usuario
                                   await userCredential.user!
                                       .sendEmailVerification();
-                                  dialogVerifyPhoneNumber(
-                                      context, usuario.phone!);
+                                  //dialogVerifyPhoneNumber(
+                                  //    context, usuario.phone!);
 
                                   // Navega a la página de inicio
                                   //navigateToHomePage(context);
@@ -252,6 +224,11 @@ class _SignupPageState extends State<SignUpPage> {
                                 }
                               }
                               //navigateToHomePage(context);
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          LogInwithPhoneNumber()));
                             },
                             child: Text('Crear Cuenta'),
                           ),
@@ -286,44 +263,24 @@ void navigateToHomePage1(BuildContext context) {
   );
 }
 
-void dialogVerifyPhoneNumber(BuildContext context, String phoneNumber) {
+void dialogVerifyPhoneNumber(BuildContext context, String PhoneNumber) {
+  String smsCode = '';
   final userCredential = FirebaseAuth.instance.currentUser;
-
   showDialog(
     context: context,
     builder: (BuildContext context) {
-      final TextEditingController _codeController = TextEditingController();
-      String verificationId = '';
-
-      void verifyPhoneNumber() async {
-        String code = _codeController.text.trim();
-        PhoneAuthCredential credential = PhoneAuthProvider.credential(
-          verificationId: verificationId,
-          smsCode: code,
-        );
-
-        try {
-          await userCredential!.linkWithCredential(credential);
-          print('Usuario vinculado con éxito');
-          navigateToHomePage(context);
-        } catch (e) {
-          print('Error al vincular el número de teléfono: $e');
-          // Maneja el error de vinculación aquí
-        }
-      }
-
       return AlertDialog(
         title: Text('Verificar número de teléfono'),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
             Text(
-                'Por favor, ingresa el código de verificación enviado a $phoneNumber'),
+                'Por favor, ingresa el código de verificación enviado a $PhoneNumber'),
             TextField(
               keyboardType: TextInputType.number,
               controller: _codeController,
               inputFormatters: <TextInputFormatter>[
-                FilteringTextInputFormatter.digitsOnly,
+                FilteringTextInputFormatter.digitsOnly
               ],
             ),
           ],
@@ -337,33 +294,32 @@ void dialogVerifyPhoneNumber(BuildContext context, String phoneNumber) {
           ),
           ElevatedButton(
             child: Text('Verificar'),
-            onPressed: verifyPhoneNumber,
+            onPressed: () async {
+              await FirebaseAuth.instance.verifyPhoneNumber(
+                  phoneNumber: "+52$PhoneNumber",
+                  verificationCompleted:
+                      (PhoneAuthCredential credential) async {
+                    await userCredential!.linkWithCredential(credential);
+                    print('Usuario vinculado');
+                  },
+                  verificationFailed: (FirebaseAuthException e) {
+                    print(e.message);
+                    print('Error ------');
+                  },
+                  codeSent: (String verificationId, int? resendToken) {
+                    verificationID = verificationId;
+                  },
+                  codeAutoRetrievalTimeout: (String verificationId) {});
+              String code = _codeController.text.trim();
+              PhoneAuthCredential credenciales = PhoneAuthProvider.credential(
+                  verificationId: verificationID, smsCode: code);
+              await userCredential!.linkWithCredential(credenciales);
+              navigateToHomePage(context);
+            }, //aqui finaliza el onpressed
           ),
         ],
       );
     },
-  );
-
-  FirebaseAuth.instance.verifyPhoneNumber(
-    phoneNumber: "+52$phoneNumber",
-    verificationCompleted: (PhoneAuthCredential credential) async {
-      try {
-        await userCredential!.linkWithCredential(credential);
-        print('Usuario vinculado automáticamente');
-        navigateToHomePage(context);
-      } catch (e) {
-        print('Error al vincular el número de teléfono: $e');
-        // Maneja el error de vinculación aquí
-      }
-    },
-    verificationFailed: (FirebaseAuthException e) {
-      print('Error de verificación: ${e.message}');
-      // Maneja el error de verificación aquí
-    },
-    codeSent: (String verificationId, int? resendToken) {
-      verificationId = verificationId;
-    },
-    codeAutoRetrievalTimeout: (String verificationId) {},
   );
 }
 

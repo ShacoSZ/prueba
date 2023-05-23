@@ -9,6 +9,8 @@ import 'package:raccoon_doctor/screens/RecoveryPasswordPage.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
+import 'LogInwithPhoneNumber.dart';
+
 class LoginForm extends StatefulWidget {
   @override
   _LoginFormState createState() => _LoginFormState();
@@ -146,7 +148,7 @@ class _LoginFormState extends State<LoginForm> {
                             ),
                             child: const Text('Iniciar sesión'),
                           ),
-                          const SizedBox(width: 50),
+                          const SizedBox(width: 25),
                           ElevatedButton(
                             onPressed: () => navigateToSignUpScreen(context),
                             style: ElevatedButton.styleFrom(
@@ -161,13 +163,13 @@ class _LoginFormState extends State<LoginForm> {
                               style: TextStyle(color: Colors.black),
                             ),
                           ),
-                          const SizedBox(width: 25)
+                          const SizedBox(width: 23)
                         ],
                       )),
                 ],
               ),
             ),
-          )
+          ),
         ]));
   }
 }
